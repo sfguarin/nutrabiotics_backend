@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- titulo que sale en la pestaña -->
+    <title>Google Sign-In</title>
+
+    <!-- Especifique el ID de cliente de su aplicación, agregar el GOOGLE_CLIENT_ID que tengo en .env -->
+    <meta name="google-signin-client_id" content="273181471717-oeh7qrbqd5ii2pf18jti4q1aj4g39de2.apps.googleusercontent.com">
+</head>
+<body>
+
+    <!-- primer linea de texto que sale -->
+    <h1>Google Sign-In</h1>
+
+    <!-- Para poner una linea horizontal -->
+    <hr>
+
+    <!-- Agregar boton de inicio de sesion de Google -->
+    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+
+    <!-- Cargar la biblioteca de Google Platform -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+    <!-- Boton para cerrar sesión -->
+    <a href="#" onclick="signOut();">Sign out</a>
+
+    <script>
+
+        //Definición de mi url dependiendo de donde me encuentre 
+        //window.location sirve para ver donde me encuentro y se ve en consola del navegador, donde hostname es
+        //es el host donde se encuentra y .includes quiere decir si ese hostname tiene como valor localhost 
+
+        var url = ( window.location.hostname.includes('localhost') )
+            //Si el valor es true osea si hostname si tiene el valor de localhost la dirección url es la siguiente
+            ? 'http://localhost:8080/api/auth/google'
+            //Si el valor es false osea si hostname no tiene el valor de localhost la dirección url es la siguiente
+            : 'https://rest-server-sfgs.herokuapp.com/api/auth/google'
+
+
+        // Administrador de la información que viene de google
+        function onSignIn(googleUser) {
+
+            //Obtener información de perfil
+            var profile = googleUser.getBasicProfile();
+            console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+            console.log('Name: ' + profile.getName());
+            console.log('Image URL: ' + profile.getImageUrl());
+            console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+
+            // Extraer el token generado de google
+            var id_token = googleUser.getAuthResponse().id_token;
+
+            //Para guardar el token con el nombre que yo quiero que se guarde. En este caso id_token porque asi fue como lo 
+            // asigne en el check de routes>auth, esto se guarda en la request que luego lo utilizo en mi controlador 
+            // aut_controller>googleSignin id_token: id_token
+            const data = {id_token};
+
+            //El fetch se puede hacer una suposición que es como un postman
+            //La función fetch proporciona una interfaz JavaScript para acceder y manipular partes del canal HTTP
+            //tales como peticiones y respuestas. Obtener recursos de la red
+            fetch(url, {
+
+                //Petición que necesito llamar- como en postman
+                method: 'POST',
+                
+                //formato en que espero que venga la información-headers de postman que necesito
+                headers: {'Content-Type': 'application/json'},
+
+                //Mando mi valor de la data al body - como cuando me voy a body, raw, json he inserto los datos
+                body: JSON.stringify(data)
+
+            })
+            //como el fetch es una promesa puedo poner el then para arrojar resultados si todo sale bien
+            //Si todo sale bien ejecuto mi respuesta resp y la transformo a formato json (status: 200, ok, etc)
+            .then(resp => resp.json() )
+            //despues de tener mi resp transformada a json puede saber su valor en la console del navegador,
+            //como cuando postman me da su respuesta
+            .then( data => console.log('Nuestro server', data))
+            //por si sucede un error 
+            .catch( console.log );
+
+            //Impresión del token de google en la consola del navegador
+            //console.log(id_token);
+        }
+
+        // función para poder cerrar sesion
+        function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+            console.log('User signed out.');
+            });
+        }
+
+    </script>
+
+</body>
+</html>

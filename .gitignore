@@ -1,0 +1,11 @@
+
+# Modulos de node
+node_modules/
+
+# Variables de entorno que tengo que ignorar
+.env
+
+# Archivos de carga - usar Cloudinary porque Heroku va borrando los archivos cargados para hacer mi repositorio mas
+# opmimo
+uploads/productos/**.*
+uploads/usuarios/**.*
