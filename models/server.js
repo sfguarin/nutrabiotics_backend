@@ -69,9 +69,9 @@ class Server {
         //Directorio publico, para hacer uso del html que se ubica en la carpeta public (encargado del front)
         this.app.use( express.static('public') );
 
-        this.app.get( '*', (req, res) =>{
-            res.sendFile( path.resolve('./public/index.html'));
-        });
+        // this.app.get( '*', (req, res) =>{
+        //     res.sendFile( path.resolve('./public/index.html'));
+        // });
 
         //Middleware para realizar la carga de archivos usando el paquete express-fileupload
         this.app.use(fileUpload({
