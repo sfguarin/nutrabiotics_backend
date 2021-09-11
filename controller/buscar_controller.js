@@ -4,11 +4,11 @@ const { Usuario, Categoria, Producto } = require("../models");
 
 //Crear arreglo con las colecciones permitidas
 const coleccionesPermitidas = [
-    'usuarios',
-    'categorias',
+    // 'usuarios',
+    // 'categorias',
     'productos',
-    //Roles no deberia ser permitido pero es para manejar el error 
-    'roles'
+    // //Roles no deberia ser permitido pero es para manejar el error 
+    // 'roles'
 ]
 
 //Se crea funciones independientes para cada case que el usuario pueda elegir, se manda como argumento el
@@ -113,8 +113,6 @@ const buscarProducto = async ( termino = '', res = response ) => {
         //Busqueda del producto por el id ingresado por el usuario, mostrar el nombre del usuario y categoria 
         //encontrada por el is
         const producto = await Producto.findById(termino)
-                                       .populate('usuario', 'nombre')
-                                       .populate('categoria', 'nombre')
 
         //Respuesta 
         return res.json({
@@ -132,14 +130,12 @@ const buscarProducto = async ( termino = '', res = response ) => {
         $or: [{nombre: regex}],
         $and: [{estado: true}]
     })
-    //populate() para mostrar el nombre del usuario y categoria de todas los productos encontrados
-    .populate('usuario', 'nombre')
-    .populate('categoria', 'nombre')
+    // //populate() para mostrar el nombre del usuario y categoria de todas los productos encontrados
+    // .populate('usuario', 'nombre')
+    // .populate('categoria', 'nombre')
 
     //Mostrar el resultado de los productos encontrados 
-    res.json({
-        results: productos
-    })
+    res.json(productos)
 
 
 }

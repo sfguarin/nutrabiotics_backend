@@ -20,7 +20,7 @@ const { existeCategoria } = require('../helpers/db-validators');
 // Importación de middlewares para validar JWT y validar campos en
 //caso de exitir un error
 const { validarJWT, validarCampos, tieneRol } = require('../middlewares');
-
+ 
 
 
 //función router que me permite hacer las interacciones put, post,delete, etc.

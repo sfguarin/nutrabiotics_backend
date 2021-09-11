@@ -18,9 +18,7 @@ const { existeProducto } = require('../helpers/db-validators');
 
 // Importación de middlewares para validar JWT y validar campos en caso de exitir un error
 const { validarJWT,
-        validarCampos,
-        tieneRol,
-        validarCategoria 
+        validarCampos
        } = require('../middlewares');
 
 
@@ -39,16 +37,15 @@ router.get('/:id', [
 
 //Crear producto - privado - cualquier persona con un token valido
 router.post('/',[
-    validarJWT,
+    // validarJWT,
     check('nombre', 'El nombre es obligatorio').not().isEmpty(),
     check('categoria', 'El nombre de la categoria es obligatorio').not().isEmpty(),
     validarCampos,
-    validarCategoria
 ], crearProducto)
 
 //Actualizar un producto - privado - con un token valido
 router.put('/:id', [
-    validarJWT,
+    // validarJWT,
     check('id', 'No es un ID válido').isMongoId(),
     check('id').custom(existeProducto),
     validarCampos,
@@ -56,10 +53,9 @@ router.put('/:id', [
 
 //Borrar un producto - ADMIN
 router.delete('/:id', [
-    validarJWT,
+    // validarJWT,
     check('id', 'No es un ID válido').isMongoId(),
     check('id').custom(existeProducto),
-    tieneRol('ADMIN_ROLE'),
     validarCampos
 ], borrarProducto) 
 

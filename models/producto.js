@@ -18,16 +18,16 @@ const ProductoSchema = Schema({
         required: true 
     },
 
-    // Para saber que usuario creo el producto
-    usuario: {
-        //Quiere decir que es de otro tipo objeto (modelo) que tengo en mongo y necesito el id de ese objeto
-        type: Schema.Types.ObjectId,
-        //Como se llama el modelo de mi objeto que requiero, como lo ponga en models>usuario.js>module.exports 
-        //asi lo pongo tal cual 
-        ref: 'Usuario',
-        required: true
+    //Para saber que usuario creo el producto
+    // usuario: {
+    //     //Quiere decir que es de otro tipo objeto (modelo) que tengo en mongo y necesito el id de ese objeto
+    //     type: Schema.Types.ObjectId,
+    //     //Como se llama el modelo de mi objeto que requiero, como lo ponga en models>usuario.js>module.exports 
+    //     //asi lo pongo tal cual 
+    //     ref: 'Usuario',
+    //     required: true
 
-    },
+    // },
 
     //Precio del producto
     precio: {
@@ -37,9 +37,13 @@ const ProductoSchema = Schema({
 
     //Categoria a la que pertenece el producto 
     categoria: {
-        type: Schema.Types.ObjectId,
-        ref: 'Categoria',
-        required: true
+        type: String,
+        required: [true, 'La cateforia es obligatoria']
+    },
+
+    //Descripción del producto
+    presentacion: {
+        type: String,
     },
 
     //Descripción del producto
@@ -47,15 +51,17 @@ const ProductoSchema = Schema({
         type: String,
     },
 
+
     //Ver si el producto se encuentra disponible
-    disponible: {
-        type: Boolean,
-        default: true
+    moneda: {
+        type: String,
+        default: 'COP'
     },
 
     //Imagen del producto
     img: {
         type: String,
+        default: 'assets/undefined.jpeg'
     }
 
 });

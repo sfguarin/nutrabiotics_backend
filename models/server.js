@@ -13,6 +13,8 @@ const { dbConnection } = require('../DB/config');
 //Paquete para realizar la carga de archivos
 const fileUpload = require('express-fileupload');
 
+const path = require('path');
+
 //Creación de clase que voy a exportar a app.js
 class Server {
 
@@ -31,7 +33,6 @@ class Server {
             
             auth:       '/api/auth',
             buscar:     '/api/buscar',
-            categorias: '/api/categorias',
             productos:  '/api/productos',
             usuarios:   '/api/usuarios',
             uploads:    '/api/uploads'
@@ -68,6 +69,10 @@ class Server {
         //Directorio publico, para hacer uso del html que se ubica en la carpeta public (encargado del front)
         this.app.use( express.static('public') );
 
+        this.app.get( '*', (req, res) =>{
+            res.sendFile( path.resolve('./public/index.html'));
+        });
+
         //Middleware para realizar la carga de archivos usando el paquete express-fileupload
         this.app.use(fileUpload({
             useTempFiles : true,
@@ -88,9 +93,6 @@ class Server {
 
         //funcion para llamar los endpoints puestos en ../routes/buscar con el url /api/buscar
         this.app.use(this.paths.buscar, require('../routes/buscar'));
-
-        //funcion para llamar los endpoints puestos en ../routes/categorias con el url /api/categorias
-        this.app.use(this.paths.categorias, require('../routes/categorias'));
 
         //funcion para llamar los endpoints puestos en ../routes/productos con el url /api/productos
         this.app.use(this.paths.productos, require('../routes/productos'));
